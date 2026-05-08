@@ -1,20 +1,25 @@
 <script setup lang="ts">
 const props = defineProps<{
-  quests: Array<{ id: number; title: string; xp: number; completed: boolean }>
+  quests: Array<{ id: number; title: string; xp: number; completed: boolean }>;
 }>();
 
 const emit = defineEmits<{
-  complete: [id: number]
+  complete: [id: number];
 }>();
+
+const handleComplete = (id: number) => {
+  emit('complete', id);
+};
 </script>
 
 <template>
   <div class="quest-list">
     <h3>Dine Quests</h3>
     <ul>
-      <li v-for="quest in quests" :key="quest.id" :class="{ completed: quest.completed }">
+      <li v-for="quest in props.quests" :key="quest.id" :class="{ completed: quest.completed }">
         <span>{{ quest.title }} - {{ quest.xp }} XP</span>
-        <button v-if="!quest.completed" @click="emit('complete', quest.id)">Fullfør</button>
+        <button v-if="!quest.completed" @click="handleComplete(quest.id)">Fullfør</button>
+        <span v-else class="completed-label">Fullført</span>
       </li>
     </ul>
   </div>
@@ -22,7 +27,7 @@ const emit = defineEmits<{
 
 <style scoped>
 .quest-list {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 ul {
@@ -34,10 +39,11 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
   border: 1px solid #ddd;
-  margin-bottom: 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  background: #fff;
 }
 
 .completed {
@@ -49,12 +55,17 @@ button {
   background: #4CAF50;
   color: white;
   border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 button:hover {
   background: #45a049;
+}
+
+.completed-label {
+  color: #555;
+  font-weight: 600;
 }
 </style>
