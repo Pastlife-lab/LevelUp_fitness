@@ -30,10 +30,32 @@ const CompletedQuest = (id) => {
     }
 };
 
+// ignorer feilbeskjed
+const addNewQuest = (newQuestData) => {
+  const newObj = {
+    id: Date.now(), // enkel unik for og tracke 
+    title: newQuestData.title,
+    xp: newQuestData.xp,
+    completed: false
+  };
+};
+
 </script>
 <template>
   <div class="app">
-    <router-view />
+    <h1>LevelUp Fitness</h1>
+    <p>Status: Level {{ currentLevel }} ({{ totalXP }} XP)</p>
+    
+    <hr>
+    
+    <ul>
+      <li v-for="quest in quests" :key="quest.id">
+        {{ quest.title }} - {{ quest.xp }} XP 
+        <button @click="completeQuest(quest.id)" :disabled="quest.completed">
+          {{ quest.completed ? 'Fullført!' : 'Fullfør' }}
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 

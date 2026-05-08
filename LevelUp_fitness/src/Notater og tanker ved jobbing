@@ -1,7 +1,27 @@
+    HUSK!!!!! Data NED, Hendelser OPP!!!!!!!
+
+App.vue
+    -Eierskap av state: App.vue holder på den "reaktive kilden til sannheten" (totalXP og quest array)
+    -Overordnet Logikk: Funksjoner som completeQuest() og addNewQuest() 
+        forblir her for å sikre dataintegritet.
+    -Data-bro: Fungerer som bindeleddet mellom input-skjemaet og visnings-liste.
+    -Validering: sjekker om brukeren faktisk har nådd en ny "level" før den oppdaterer XP og level visuelt.
+
 fullføre Quest delen før du går videre
     -legg til "add quest"
+        -btn for emit
+        -view
+        -StatusBar (xp bar og level)(Props)
+        -QuestList (VIser alle treninger)(Props)
+        -QuestForm (legger til data)(emits)
 
 Legge til Brukere
     -gi dem xp bar / level
-    -
+    -Framtidig legge til profilside
+    -Legge til "add user"
+        -btn for emit
+        -view
+        -StatusBar (xp bar og level)(Props)
+        -UserList (VIser alle brukere)(Props)
+        -UserForm (legger til data)(emits)
     
