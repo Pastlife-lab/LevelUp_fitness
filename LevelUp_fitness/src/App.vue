@@ -60,6 +60,12 @@ const handleComplete = (id: number) => {
 
 <template>
   <div class="container">
+    <h1>LevelUp Fitness</h1>    
+    
+    <StatusBar :totalXP="totalXP" :currentLevel="currentLevel" />
+    
+    <QuestForm @add-quest="addNewQuest" />
+    <QuestList :quests="quests" @complete="handleComplete" />
     <Transition name="bounce">
       <div v-if="showLevelUp" class="level-up-modal">
         <div class="content">
@@ -70,11 +76,8 @@ const handleComplete = (id: number) => {
       </div>
     </Transition>
 
-    <h1>LevelUp Fitness</h1>
-    <StatusBar :totalXP="totalXP" :currentLevel="currentLevel" />
     
-    <QuestForm @add-quest="addNewQuest" />
-    <QuestList :quests="quests" @complete="handleComplete" />
+
   </div>
 </template>
 
@@ -120,5 +123,14 @@ h1 { font-size: 3.5rem; margin: 0; color: #1e293b; }
   0% { transform: scale(0); }
   50% { transform: scale(1.2); }
   100% { transform: scale(1); }
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 </style>

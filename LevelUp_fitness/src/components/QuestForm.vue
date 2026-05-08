@@ -24,7 +24,7 @@ const submitForm = () => {
 
 <template>
   <div class="quest-form">
-    <h3>Legg til ny Quest</h3>
+    <h3>Legg til ny Økt</h3>
     
     <input 
       v-model="title" 
