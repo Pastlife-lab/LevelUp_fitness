@@ -4,9 +4,18 @@ import StatusBar from './StatusBar.vue';
 import QuestList from './components/QuestList.vue';
 import QuestForm from './components/QuestForm.vue';
 
-const totalXP = ref(0);
-const showLevelUp = ref(false);
+const totalXP = ref(JSON.parse(localStorage.getItem('totalXP') || '0'));
+const quests = ref(JSON.parse(localStorage.getItem('fitness_quests')) || [
+  {id: 1, title: 'Løping Interval 2min 30 sek, 30 sek gå', xp: 50, completed: false },
+  {id: 2, title: 'Squats 4 sett x 10 repetisjoner', xp: 30, completed: false },
+  {id: 3, title: 'Planke 4 sett x 30 sekunder', xp: 20, completed: false },
+  {id: 4, title: 'Push-ups 4 sett x 10 repetisjoner', xp: 25, completed: false },
+  {id: 5, title: 'Utfall 4 sett x 10 repetisjoner per ben', xp: 30, completed: false },
+  {id: 6, title: 'Nedtrekk 4 sett x 10 repetisjoner', xp: 30, completed: false },
+  {id: 7, title: 'Biceps curls 4 sett x 10 repetisjoner', xp: 20, completed: false },
+]);
 
+const showLevelUp = ref(false);
 const currentLevel = computed(() => Math.floor(totalXP.value / 100) + 1);
 
 watch(currentLevel, (newLevel, oldLevel) => {
@@ -35,17 +44,6 @@ const addNewQuest = (data) => {
   // Dytter det nye objektet inn i den reaktive listen
   quests.value.push(newObj);
 };
-
-// Eksempel på quests med XP-belønninger, for enkel start for trening
-const quests = ref([
-  {id: 1, title: 'Løping Interval 2min 30 sek, 30 sek gå', xp: 50, completed: false },
-  {id: 2, title: 'Squats 4 sett x 10 repetisjoner', xp: 30, completed: false },
-  {id: 3, title: 'Planke 4 sett x 30 sekunder', xp: 20, completed: false },
-  {id: 4, title: 'Push-ups 4 sett x 10 repetisjoner', xp: 25, completed: false },
-  {id: 5, title: 'Utfall 4 sett x 10 repetisjoner per ben', xp: 30, completed: false },
-  {id: 6, title: 'Nedtrekk 4 sett x 10 repetisjoner', xp: 30, completed: false },
-  {id: 7, title: 'Biceps curls 4 sett x 10 repetisjoner', xp: 20, completed: false },
-]);
 
 // logikk og funksjoner for å fullføre quests og oppdatere XP
 const handleComplete = (id: number) => {

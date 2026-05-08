@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+
 const props = defineProps<{
   quests: Array<{ id: number; title: string; xp: number; completed: boolean }>;
 }>();
