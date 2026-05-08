@@ -1,6 +1,21 @@
 <script setup lang="ts">
-
 import { ref, computed } from 'vue';
+import StatusBar from './components/StatusBar.vue';
+import QuestList from './components/QuestList.vue';
+import QuestForm from './components/QuestForm.vue';
+
+
+const addNewQuest = (data) => {
+  const newObj = {
+    id: Date.now(), // Lager en unik ID
+    title: data.title,
+    xp: data.xp,
+    completed: false
+  };
+  
+  // Dytter det nye objektet inn i den reaktive listen
+  quests.value.push(newObj);
+};
 
 // Brukerens nåværende nivå og XP
 const totalXP = ref(0);
@@ -19,44 +34,43 @@ const quests = ref([
 // logikk og funksjoner for å fullføre quests og oppdatere XP
 // ignorer feilbeskjed
 const currentLevel = computed(() => {
-  return math.floor(totalXP.value / 100) + 1;
+  return Math.floor(totalXP.value / 100) + 1;
 });
 // ignorer feilbeskjed *denne er for når quest er fullført* 
-const CompletedQuest = (id) => {
+const handleComplete = (id: number) => {
   const quest = quests.value.find(q => q.id === id);
     if (quest && !quest.completed) {
       quest.completed = true;
-      titalXP.value += quest.xp
+      totalXP.value += quest.xp
     }
 };
 
-// ignorer feilbeskjed
-const addNewQuest = (newQuestData) => {
-  const newObj = {
-    id: Date.now(), // enkel unik for og tracke 
-    title: newQuestData.title,
-    xp: newQuestData.xp,
-    completed: false
-  };
-};
-
 </script>
+
 <template>
-  <div class="app">
+  <main>
     <h1>LevelUp Fitness</h1>
-    <p>Status: Level {{ currentLevel }} ({{ totalXP }} XP)</p>
+    <div class="container">
+    <StatusBar :totalXP="totalXP" />
     
-    <hr>
-    
-    <ul>
-      <li v-for="quest in quests" :key="quest.id">
-        {{ quest.title }} - {{ quest.xp }} XP 
-        <button @click="completeQuest(quest.id)" :disabled="quest.completed">
-          {{ quest.completed ? 'Fullført!' : 'Fullfør' }}
-        </button>
-      </li>
-    </ul>
+    <QuestForm @add-quest="addNewQuest" />
+    <QuestList :quests="quests" @complete="handleComplete" />
   </div>
+    <p>Din XP: {{ totalXP }}</p>
+
+    <QuestForm @add-quest="addNewQuest" />
+
+    <QuestList 
+      :quests="quests" 
+      @complete="handleComplete" 
+    />
+  
+  
+  </main>
+
+<footer>
+  
+</footer>
 </template>
 
 <style scoped>
