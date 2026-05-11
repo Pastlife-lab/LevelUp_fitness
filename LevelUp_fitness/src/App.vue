@@ -4,8 +4,23 @@ import StatusBar from './StatusBar.vue';
 import QuestList from './components/QuestList.vue';
 import QuestForm from './components/QuestForm.vue';
 
-const totalXP = ref(JSON.parse(localStorage.getItem('totalXP') || '0'));
-const quests = ref(JSON.parse(localStorage.getItem('fitness_quests')) || [
+type Quest = {
+  id: number;
+  title: string;
+  xp: number;
+  completed: boolean;
+};
+
+const saveToStorage = () => {
+  localStorage.setItem('fitness_xp', JSON.stringify(totalXP.value));
+  localStorage.setItem('fitness_quests', JSON.stringify(quests.value));
+};
+
+window.addEventListener('beforeunload', saveToStorage);
+
+const totalXP = ref(JSON.parse(localStorage.getItem('fitness_xp') ?? '0') || 0);
+const savedQuests = JSON.parse(localStorage.getItem('fitness_quests') ?? 'null') as Quest[] | null;
+const quests = ref<Quest[]>(savedQuests ?? [
   {id: 1, title: 'Løping Interval 2min 30 sek, 30 sek gå', xp: 50, completed: false },
   {id: 2, title: 'Squats 4 sett x 10 repetisjoner', xp: 30, completed: false },
   {id: 3, title: 'Planke 4 sett x 30 sekunder', xp: 20, completed: false },
@@ -15,9 +30,17 @@ const quests = ref(JSON.parse(localStorage.getItem('fitness_quests')) || [
   {id: 7, title: 'Biceps curls 4 sett x 10 repetisjoner', xp: 20, completed: false },
 ]);
 
+const deleteQuest = (id: number) => {
+  quests.value = quests.value.filter(q => q.id !== id);
+};
+
+watch(quests, () => {
+  saveToStorage();
+}, { deep: true });
+
+
 const showLevelUp = ref(false);
 const currentLevel = computed(() => Math.floor(totalXP.value / 100) + 1);
-
 watch(currentLevel, (newLevel, oldLevel) => {
   if (newLevel > oldLevel) {
     triggerLevelUp();
@@ -33,7 +56,7 @@ const triggerLevelUp = () => {
   }, 3000);
 };
 
-const addNewQuest = (data) => {
+const addNewQuest = (data: { title: string; xp: number }) => {
   const newObj = {
     id: Date.now(), // Lager en unik ID
     title: data.title,
@@ -47,7 +70,7 @@ const addNewQuest = (data) => {
 
 // logikk og funksjoner for å fullføre quests og oppdatere XP
 const handleComplete = (id: number) => {
-  const quest = quests.value.find(q => q.id === id);
+  const quest = quests.value.find((q) => q.id === id);
     if (quest && !quest.completed) {
       quest.completed = true;
       totalXP.value += quest.xp
@@ -63,7 +86,9 @@ const handleComplete = (id: number) => {
     <StatusBar :totalXP="totalXP" :currentLevel="currentLevel" />
     
     <QuestForm @add-quest="addNewQuest" />
-    <QuestList :quests="quests" @complete="handleComplete" />
+    <QuestList :quests="quests" 
+      @delete="deleteQuest" 
+      @complete="handleComplete" />
     <Transition name="bounce">
       <div v-if="showLevelUp" class="level-up-modal">
         <div class="content">

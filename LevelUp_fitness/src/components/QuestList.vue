@@ -6,12 +6,18 @@ const props = defineProps<{
   quests: Array<{ id: number; title: string; xp: number; completed: boolean }>;
 }>();
 
-const emit = defineEmits<{
+
+const emit = defineEmits<{  
   complete: [id: number];
+  delete: [id: number];
 }>();
 
 const handleComplete = (id: number) => {
   emit('complete', id);
+};
+
+const handleDelete = (id: number) => {
+  emit('delete', id);
 };
 </script>
 
@@ -21,8 +27,11 @@ const handleComplete = (id: number) => {
     <ul>
       <li v-for="quest in props.quests" :key="quest.id" :class="{ completed: quest.completed }">
         <span>{{ quest.title }} - {{ quest.xp }} XP</span>
-        <button v-if="!quest.completed" @click="handleComplete(quest.id)">Fullfør</button>
-        <span v-else class="completed-label">Fullført</span>
+        <div>
+          <button v-if="!quest.completed" @click="handleComplete(quest.id)">Fullfør</button>
+          <span v-else class="completed-label">Fullført</span>
+          <button class="delete-btn" @click="handleDelete(quest.id)">Slett</button>
+        </div>
       </li>
     </ul>
   </div>
@@ -71,4 +80,21 @@ button:hover {
   color: #555;
   font-weight: 600;
 }
+
+.delete-btn {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
 </style>
