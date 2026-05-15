@@ -81,7 +81,7 @@ input {
   background: rgba(0, 0, 0, 0.2);
   border: 2px solid #334155;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
