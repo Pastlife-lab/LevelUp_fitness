@@ -56,6 +56,7 @@ li {
   border-radius: 8px;
   margin-bottom: 0.75rem;
   background: #fff;
+
 }
 
 .completed {

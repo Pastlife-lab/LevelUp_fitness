@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import StatusBar from './StatusBar.vue';
+import StatusBar from './components/StatusBar.vue';
 import QuestList from './components/QuestList.vue';
 import QuestForm from './components/QuestForm.vue';
 
@@ -40,10 +40,10 @@ watch(quests, () => {
 
 
 const showLevelUp = ref(false);
-const currentLevel = computed(() => Math.floor(totalXP.value / 100) + 1);
+const currentLevel = computed(() => Math.floor(totalXP.value / 100 + 1));
 watch(currentLevel, (newLevel, oldLevel) => {
   if (newLevel > oldLevel) {
-    triggerLevelUp();
+    triggerLevelUp(); 
   }
 });
 
@@ -148,12 +148,31 @@ h1 { font-size: 3.5rem; margin: 0; color: #1e293b; }
   100% { transform: scale(1); }
 }
 
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
-  background: #f0f0f0;
+button {
+  cursor: pointer;
+  border: none;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
 }
+
+.btn-complete {
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  padding: 10px 20px;
+}
+
+.btn-complete:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 0 15px var(--accent-green);
+}
+
+.btn-complete:disabled {
+  background: #334155;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
 </style>

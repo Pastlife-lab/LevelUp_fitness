@@ -32,7 +32,8 @@ const xpRemaining = computed(() => {
       <div 
         class="fill" 
         :style="{ width: progress + '%' }"
-      >
+        >
+
         <span v-if="progress > 15">{{ progress }}%</span>
       </div>
     </div>
@@ -50,6 +51,7 @@ const xpRemaining = computed(() => {
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
+
 
 .header {
   display: flex;
@@ -72,7 +74,7 @@ h2 {
 }
 
 .fill {
-  background: linear-gradient(90deg, #10b981, #34d399); /* Grønn gradient */
+  background: linear-gradient(180deg, #10b981, #34d399); /* Grønn gradient */
   height: 100%;
   display: flex;
   align-items: center;

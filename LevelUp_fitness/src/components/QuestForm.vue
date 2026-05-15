@@ -3,55 +3,133 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['add-quest']);
 
-// Lokale variabler for skjemaet
 const title = ref('');
-const xp = ref(20); // Standardverdi
+const selectedXP = ref(20);
+
+// Alternativer for XP
+const xpOptions = [
+  { label: 'Enkel', value: 10, icon: '🏃' },
+  { label: 'Middels', value: 20, icon: '💪' },
+  { label: 'Hard', value: 50, icon: '🔥' },
+  { label: 'Epic', value: 100, icon: '🏆' }
+];
 
 const submitForm = () => {
-  // Sjekk at tittel ikke er tom
   if (title.value.trim() === '') return;
 
-  // Send dataene opp til App.vue
   emit('add-quest', {
     title: title.value,
-    xp: Number(xp.value) // Sikre at det er et tall
+    xp: selectedXP.value
   });
 
-  // Tøm feltet etterpå
+  // Nullstill feltet og sett fokus tilbake
   title.value = '';
 };
 </script>
 
 <template>
-  <div class="quest-form">
-    <h3>Legg til ny Økt</h3>
+  <div class="card quest-form">
+    <h3><i class="fa-solid fa-scroll"></i> Nytt Oppdrag</h3>
     
-    <input 
-      v-model="title" 
-      type="text" 
-      placeholder="Hva skal du trene?" 
-    />
+    <div class="input-group">
+      <input 
+        v-model="title" 
+        type="text" 
+        placeholder="Hva skal du mestre i dag?" 
+        @keyup.enter="submitForm"
+      />
+    </div>
 
-    <select v-model="xp">
-      <option value="10">Easy (10 XP)</option>
-      <option value="20">Medium (20 XP)</option>
-      <option value="50">Hard (50 XP)</option>
-      <option value="100">Epic (100 XP)</option>
-    </select>
+    <div class="xp-selector">
+      <p>Velg vanskelighetsgrad:</p>
+      <div class="chips">
+        <button 
+          v-for="option in xpOptions" 
+          :key="option.value"
+          type="button"
+          :class="['chip', { active: selectedXP === option.value }]"
+          @click="selectedXP = option.value"
+        >
+          <span class="icon">{{ option.icon }}</span>
+          <span class="label">{{ option.label }}</span>
+        </button>
+      </div>
+    </div>
 
-    <button @click="submitForm">Legg til</button>
+    <button 
+      class="btn-add" 
+      :disabled="!title.trim()" 
+      @click="submitForm"
+    >
+      Start Quest
+    </button>
   </div>
 </template>
 
 <style scoped>
-    .quest-form {
-        background: #f4f4f4;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
+.quest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
-    input, select, button {
-        margin: 5px;
-        padding: 8px;
+
+h3 { margin: 0; color: var(--accent-gold); font-size: 1.2rem; }
+
+input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid #334155;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus { border-color: var(--accent-gold); }
+
+.xp-selector p {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: #334155;
+  border: 2px solid transparent;
+  color: white;
+  border-radius: 8px;
+}
+
+.chip.active {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.btn-add {
+  background: var(--accent-gold);
+  color: #1e293b;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.btn-add:disabled {
+  background: #475569;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 </style>
