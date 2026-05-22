@@ -34,6 +34,3 @@ const router = createRouter({
 
 export default router
 
-<style>
-  
-</style>

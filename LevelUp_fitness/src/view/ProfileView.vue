@@ -1,10 +1,16 @@
+
 <script setup lang="ts">
 import { useQuestStore } from '../stores/useQuestStore'
 
 const store = useQuestStore()
+
 </script>
 
 <template>
+  
+  <div class="card profile-page">
+    
+  </div>
   <div class="card profile-page">
     <div class="avatar-circle">
       {{ store.username.charAt(0).toUpperCase() }}
@@ -19,6 +25,7 @@ const store = useQuestStore()
         type="text" 
         placeholder="Skriv ditt navn..."
       />
+      <p>Navnet ditt er nå: {{ store.username }}</p>
     </div>
 
     <div class="achievements-preview">
@@ -79,4 +86,29 @@ input {
   border-radius: 12px;
   border: 1px solid #334155;
 }
+
+.danger-zone {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.btn-reset {
+  background: transparent;
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-reset:hover {
+  background: var(--danger);
+  color: red;
+}
+
 </style>

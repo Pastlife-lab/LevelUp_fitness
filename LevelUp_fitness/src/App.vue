@@ -81,7 +81,15 @@ const addNewQuest = (data: { title: string; xp: number }) => {
 
 
 <style scoped>
+  nav {
+    display: flex;
+    gap: 1rem;
+}
 
+    .active {
+    font-weight: bold;
+    color: red;
+}
 
 .level-up-modal {
   position: fixed;

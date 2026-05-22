@@ -8,7 +8,7 @@ type Quest = {
   completed: boolean
 }
 
-const username = ref(localStorage.getItem('fitness_user') || 'Hero');
+const username = ref(localStorage.getItem('fitness_user') || 'Jon Fredrik');
 
 export const useQuestStore = defineStore('quest', () => {
   // --- STATE ---
@@ -29,6 +29,7 @@ export const useQuestStore = defineStore('quest', () => {
       completed: false
     })
   }
+
 
   function completeQuest(id: number) {
     const quest = quests.value.find(q => q.id === id)
@@ -51,7 +52,7 @@ export const useQuestStore = defineStore('quest', () => {
   
   watch(username, (newVal) => {
     localStorage.setItem('fitness_user', newVal);
-});
+  });
 
   return {
     totalXP,
@@ -61,6 +62,6 @@ export const useQuestStore = defineStore('quest', () => {
     addQuest,
     completeQuest,
     deleteQuest,
-    username: ref('') // For fremtidig bruk, f.eks. personalisering
+    username
   }
 })
