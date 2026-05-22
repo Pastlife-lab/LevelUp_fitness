@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import StatusBar from './components/StatusBar.vue';
-import QuestList from './components/QuestList.vue';
-import QuestForm from './components/QuestForm.vue';
+
 
 type Quest = {
   id: number;
@@ -29,10 +27,6 @@ const quests = ref<Quest[]>(savedQuests ?? [
   {id: 6, title: 'Nedtrekk 4 sett x 10 repetisjoner', xp: 30, completed: false },
   {id: 7, title: 'Biceps curls 4 sett x 10 repetisjoner', xp: 20, completed: false },
 ]);
-
-const deleteQuest = (id: number) => {
-  quests.value = quests.value.filter(q => q.id !== id);
-};
 
 watch(quests, () => {
   saveToStorage();
@@ -67,40 +61,21 @@ const addNewQuest = (data: { title: string; xp: number }) => {
   // Dytter det nye objektet inn i den reaktive listen
   quests.value.push(newObj);
 };
-
-// logikk og funksjoner for å fullføre quests og oppdatere XP
-const handleComplete = (id: number) => {
-  const quest = quests.value.find((q) => q.id === id);
-    if (quest && !quest.completed) {
-      quest.completed = true;
-      totalXP.value += quest.xp
-    }
-};
 </script>
 
 
 <template>
-  <div class="container">
-    <h1>LevelUp Fitness</h1>    
-    
-    <StatusBar :totalXP="totalXP" :currentLevel="currentLevel" />
-    
-    <QuestForm @add-quest="addNewQuest" />
-    <QuestList :quests="quests" 
-      @delete="deleteQuest" 
-      @complete="handleComplete" />
-    <Transition name="bounce">
-      <div v-if="showLevelUp" class="level-up-modal">
-        <div class="content">
-          <span class="icon">⭐</span>
-          <h1>LEVEL UP!</h1>
-          <p>Du har nådd nivå {{ currentLevel }}</p>
-        </div>
-      </div>
-    </Transition>
+  <div id="app-layout">
+    <nav class="navbar">
+      <RouterLink to="/">Hjem</RouterLink>
+      <RouterLink to="/quests">Oppdrag</RouterLink>
+      <RouterLink to="/history">Historikk</RouterLink>
+      <RouterLink to="/profile">Profil</RouterLink>
+    </nav>
 
-    
-
+    <main class="page-content">
+      <RouterView />
+    </main>
   </div>
 </template>
 

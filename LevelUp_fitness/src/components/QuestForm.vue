@@ -29,7 +29,7 @@ const submitForm = () => {
 
 <template>
   <div class="card quest-form">
-    <h3><i class="fa-solid fa-scroll"></i> Nytt Oppdrag</h3>
+    <h3><i class="fa-solid fa-scroll"></i> Ny Økt </h3>
     
     <div class="input-group">
       <input 

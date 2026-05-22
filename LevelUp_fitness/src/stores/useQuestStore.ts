@@ -1,27 +1,38 @@
 import {defineStore} from 'pinia';
 import {ref, computed, watch} from 'vue';
 
+type Quest = {
+  id: number
+  title: string
+  xp: number
+  completed: boolean
+}
+
+const username = ref(localStorage.getItem('fitness_user') || 'Hero');
+
 export const useQuestStore = defineStore('quest', () => {
   // --- STATE ---
   const totalXP = ref(Number(localStorage.getItem('fitness_xp')) || 0)
-  const quests = ref(JSON.parse(localStorage.getItem('fitness_quests') || '[]'))
+  const quests = ref<Quest[]>(JSON.parse(localStorage.getItem('fitness_quests') || '[]'))
 
   // --- GETTERS (Computed) ---
   const currentLevel = computed(() => Math.floor(totalXP.value / 100) + 1)
-  const progress = computed(() => totalXP.value % 100)})
+  const progress = computed(() => totalXP.value % 100)
 
   // --- ACTIONS (functions) ---
   function addQuest(title: string, xp: number) {
-    quests.value.push({ 
-    title, 
-    xp, 
-    completed: false 
-     })
+    const nextId = quests.value.length ? Math.max(...quests.value.map(q => q.id)) + 1 : 1
+    quests.value.push({
+      id: nextId,
+      title,
+      xp,
+      completed: false
+    })
   }
 
   function completeQuest(id: number) {
     const quest = quests.value.find(q => q.id === id)
-        if (quest && !quest.completed) {
+    if (quest && !quest.completed) {
       quest.completed = true
       totalXP.value += quest.xp
     }
@@ -32,18 +43,24 @@ export const useQuestStore = defineStore('quest', () => {
   }
 
   // Auto-lagting til LocalStorage ved endring
-
-  watch([totalXP, questes] () => {
+  watch([totalXP, quests], () => {
     localStorage.setItem('fitness_xp', totalXP.value.toString())
     localStorage.setItem('fitness_quests', JSON.stringify(quests.value))
-  }, { deep: true }
+    
+  }, { deep: true })
+  
+  watch(username, (newVal) => {
+    localStorage.setItem('fitness_user', newVal);
+});
 
- return {
-  totalXP,
-  quests,
-  currentLevel,
-  progress,
-  addQuest,
-  completeQuest,
-  deleteQuest
+  return {
+    totalXP,
+    quests,
+    currentLevel,
+    progress,
+    addQuest,
+    completeQuest,
+    deleteQuest,
+    username: ref('') // For fremtidig bruk, f.eks. personalisering
+  }
 })
